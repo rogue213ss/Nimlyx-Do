@@ -17,6 +17,18 @@ const nextConfig = {
     };
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: "/icon",
+        destination: "/icon.png",
+      },
+      {
+        source: "/apple-icon",
+        destination: "/apple-icon.png",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
