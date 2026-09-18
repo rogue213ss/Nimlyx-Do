@@ -30,6 +30,9 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  verification: {
+    google: "omaU5bo858ZbaiXAveRvf6yKG5bUCAJmAELASs7wxMs",
+  },
   title: {
     default: `${siteConfig.name} – Free everyday tools`,
     template: `%s | ${siteConfig.name}`,
@@ -68,6 +71,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable} ${plexMono.variable}`}>
+      <head>
+        <meta name="google-site-verification" content="omaU5bo858ZbaiXAveRvf6yKG5bUCAJmAELASs7wxMs" />
+      </head>
       <body className="font-body min-h-screen flex flex-col">
         <script
           type="application/ld+json"
