@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: #0b1020;
+  color: #eef2ff;
+}
+
+/* Visible, deliberate focus ring — never suppressed */
+:focus-visible {
+  outline: 2px solid #ff795b;
+  outline-offset: 2px;
+}
+
+/* One subtle, purposeful transition: the result settling in after a
+   calculation. Not used anywhere else. Automatically neutralized by the
+   prefers-reduced-motion rule above. */
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-result-in {
+  animation: result-in 180ms ease-out;
+}
