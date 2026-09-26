@@ -4,12 +4,22 @@ import { useId, useMemo, useState } from "react";
 import { TITLE_CATEGORIES, generateTitles, type TitleCategory } from "@/lib/social/titles";
 import CopyButton from "@/components/CopyButton";
 
+// Shown before the visitor types anything, so the tool never renders with
+// an empty results area. This is real, representative output (not a
+// placeholder graphic), which means it's part of the initial server-rendered
+// HTML too — the page has actual generated-title content on first load
+// instead of that content only existing after client interaction.
+const EXAMPLE_TOPIC = "meal prepping";
+
 export default function YoutubeTitleGenerator() {
   const [topic, setTopic] = useState("");
   const [category, setCategory] = useState<TitleCategory>("howto");
   const inputId = useId();
 
-  const titles = useMemo(() => generateTitles(topic, category, 5), [topic, category]);
+  const isExample = topic.trim() === "";
+  const activeTopic = isExample ? EXAMPLE_TOPIC : topic;
+
+  const titles = useMemo(() => generateTitles(activeTopic, category, 5), [activeTopic, category]);
   const allTitlesText = titles.join("\n");
 
   return (
@@ -50,21 +60,26 @@ export default function YoutubeTitleGenerator() {
         </div>
       </fieldset>
 
-      {topic.trim() !== "" && (
-        <div className="mt-5">
-          <div className="flex items-center justify-end">
-            <CopyButton text={allTitlesText} label="Copy all" />
-          </div>
-          <ul className="mt-2 divide-y divide-line border-y border-line">
-            {titles.map((title, i) => (
-              <li key={i} className="py-2.5 flex items-center justify-between gap-3">
-                <p className="text-sm text-ink flex-1">{title}</p>
-                <CopyButton text={title} />
-              </li>
-            ))}
-          </ul>
+      <div className="mt-5" aria-live="polite">
+        <div className="flex items-center justify-between gap-3">
+          {isExample ? (
+            <p className="text-xs text-ink/50">
+              Example for &ldquo;{EXAMPLE_TOPIC}&rdquo; — type your own topic above
+            </p>
+          ) : (
+            <span />
+          )}
+          <CopyButton text={allTitlesText} label="Copy all" />
         </div>
-      )}
+        <ul className="mt-2 divide-y divide-line border-y border-line">
+          {titles.map((title, i) => (
+            <li key={i} className="py-2.5 flex items-center justify-between gap-3">
+              <p className="text-sm text-ink flex-1">{title}</p>
+              <CopyButton text={title} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

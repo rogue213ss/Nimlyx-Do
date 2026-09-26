@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCategoryBySlug, getToolsByCategory } from "@/lib/tool-registry";
-import { buildCategoryMetadata } from "@/lib/seo/tool-metadata";
+import { buildCategoryJsonLd, buildCategoryMetadata } from "@/lib/seo/tool-metadata";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 const category = getCategoryBySlug("pdf-tools");
@@ -16,6 +16,14 @@ export default function PdfToolsHubPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildCategoryJsonLd(category, "/pdf-tools/", tools)),
+        }}
+      />
+
       <Breadcrumbs
         items={[
           { name: "Home", href: "/" },
@@ -24,6 +32,7 @@ export default function PdfToolsHubPage() {
       />
       <h1 className="font-display text-3xl sm:text-4xl text-ink mt-4">{category.name}</h1>
       <p className="mt-3 max-w-prose text-ink/70 text-lg">{category.description}</p>
+      <p className="mt-3 max-w-prose text-ink/70">{category.whyTogether}</p>
 
       <ul className="mt-8 grid sm:grid-cols-2 gap-4">
         {tools.map((tool) => (

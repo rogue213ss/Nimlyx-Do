@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCategoryBySlug, getToolBySlug } from "@/lib/tool-registry";
 import { buildFaqJsonLd, buildToolMetadata, buildWebAppJsonLd } from "@/lib/seo/tool-metadata";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import RelatedTools from "@/components/RelatedTools";
 import PdfToJpg from "@/components/PdfToJpg";
 
 const tool = getToolBySlug("pdf-to-jpg");
@@ -92,6 +93,7 @@ export default function PdfToJpgPage() {
           </div>
         </section>
       )}
+      <RelatedTools tool={tool} />
     </div>
   );
 }

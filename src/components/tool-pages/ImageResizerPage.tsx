@@ -3,6 +3,7 @@ import { getCategoryBySlug, getToolBySlug } from "@/lib/tool-registry";
 import { buildFaqJsonLd, buildWebAppJsonLd } from "@/lib/seo/tool-metadata";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ImageResizer from "@/components/ImageResizer";
+import RelatedTools from "@/components/RelatedTools";
 
 export default function ImageResizerPage() {
   const tool = getToolBySlug("image-resizer");
@@ -89,6 +90,7 @@ export default function ImageResizerPage() {
           </div>
         </section>
       )}
+      <RelatedTools tool={tool} />
     </div>
   );
 }

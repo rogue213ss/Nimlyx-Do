@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getToolBySlug, getCategoryBySlug } from "@/lib/tool-registry";
 import { absoluteUrl } from "@/lib/site-config";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import RelatedTools from "@/components/RelatedTools";
 import PercentageCalculator from "@/components/PercentageCalculator";
 import { notFound } from "next/navigation";
 
@@ -176,6 +177,7 @@ export default function PercentageCalculatorPage() {
           </div>
         </section>
       )}
+      <RelatedTools tool={tool} />
     </div>
   );
 }

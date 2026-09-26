@@ -3,6 +3,7 @@ import { getCategoryBySlug, getToolBySlug } from "@/lib/tool-registry";
 import { buildFaqJsonLd, buildWebAppJsonLd } from "@/lib/seo/tool-metadata";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ImageCompressor from "@/components/ImageCompressor";
+import RelatedTools from "@/components/RelatedTools";
 import type { OutputFormat } from "@/lib/image-compressor/types";
 
 interface Props {
@@ -113,6 +114,7 @@ export default function ImageCompressorPage({ slug, initialTargetKb, initialForm
           </div>
         </section>
       )}
+      <RelatedTools tool={tool} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCategoryBySlug, getToolBySlug } from "@/lib/tool-registry";
 import { buildFaqJsonLd, buildToolMetadata, buildWebAppJsonLd } from "@/lib/seo/tool-metadata";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import RelatedTools from "@/components/RelatedTools";
 import YoutubeDescriptionGenerator from "@/components/YoutubeDescriptionGenerator";
 
 const tool = getToolBySlug("youtube-description-generator");
@@ -77,6 +78,7 @@ export default function Page() {
           </div>
         </section>
       )}
+      <RelatedTools tool={tool} />
     </div>
   );
 }

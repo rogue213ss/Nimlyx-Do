@@ -7,6 +7,10 @@ export type Category = {
   slug: string;
   name: string;
   description: string;
+  // One short, hand-written paragraph on why this specific set of tools
+  // belongs together — not a template, not restated keywords. Same
+  // hand-authored-per-entry discipline as everything else in this file.
+  whyTogether: string;
 };
 
 export type FaqItem = {
@@ -56,36 +60,48 @@ export const categories: Category[] = [
     name: "Calculators",
     description:
       "Calculators for percentages, dates, money, and everyday math — no sign-up, instant results.",
+    whyTogether:
+      "Each calculator here does one specific piece of everyday math — no spreadsheet, no sign-up, and no guessing whether a random result page got it right.",
   },
   {
     slug: "image-tools",
     name: "Image Tools",
     description:
       "Compress, resize, and convert images entirely in your browser — nothing is ever uploaded.",
+    whyTogether:
+      "Most of these exist because somewhere else has a size or dimension limit — a form, an email attachment, a profile photo. Compress first, resize second, and the file stays small enough wherever it's headed, without ever leaving your device.",
   },
   {
     slug: "developer-tools",
     name: "Developer Tools",
     description:
       "JSON, encoding, and other developer utilities that run entirely in your browser.",
+    whyTogether:
+      "Small, focused developer utilities — the kind you reach for mid-task, not a browser-based IDE. Each one solves one recurring job well rather than trying to do everything.",
   },
   {
     slug: "pdf-tools",
     name: "PDF Tools",
     description:
       "Merge, split, and manage PDF files entirely in your browser — nothing is ever uploaded.",
+    whyTogether:
+      "Between them, these cover the PDF tasks people actually run into — combining files into one document, shrinking one that's too large to email, splitting a document apart, and converting to and from JPG. Chain a few together (split, then compress, then merge) without installing anything.",
   },
   {
     slug: "text-tools",
     name: "Text Tools",
     description:
       "Count words and characters and work with text entirely in your browser — nothing is ever uploaded.",
+    whyTogether:
+      "Utilities that work directly on text you paste in, starting with counting words and characters. Nothing is sent anywhere — the text stays in your browser the whole time.",
   },
   {
     slug: "social-media-tools",
     name: "Social Media Tools",
     description:
       "Generate captions, hashtags, titles, and bios using simple templates — entirely in your browser.",
+    whyTogether:
+      "These cover the repetitive writing that comes with posting — titles, descriptions, captions, hashtags, and bios — using proven templates, so you're editing a solid draft instead of starting from a blank box.",
   },
 ];
 
@@ -1153,4 +1169,32 @@ export function getToolsByCategory(categorySlug: string): ToolConfig[] {
 
 export function getIndexableTools(): ToolConfig[] {
   return tools.filter((t) => t.indexable);
+}
+
+/** Most recent `lastUpdated` among a category's indexable tools — used as
+ * that category hub's sitemap `lastModified`. Derived from data that's
+ * already hand-maintained per tool (updated whenever a tool's content
+ * actually changes), rather than a separate date someone has to remember
+ * to bump on the hub page itself. Returns undefined for a category with no
+ * indexable tools (not currently the case for any category, but a real
+ * `undefined` is more honest than a fabricated fallback date). ISO date
+ * strings (YYYY-MM-DD) sort correctly as plain strings, so no Date parsing
+ * is needed here.
+ */
+export function getCategoryLastUpdated(categorySlug: string): string | undefined {
+  const dates = getToolsByCategory(categorySlug)
+    .filter((t) => t.indexable)
+    .map((t) => t.lastUpdated);
+  if (dates.length === 0) return undefined;
+  return dates.reduce((latest, d) => (d > latest ? d : latest));
+}
+
+/** Most recent `lastUpdated` across every indexable tool — used as the
+ * homepage's sitemap `lastModified`, on the same reasoning as
+ * `getCategoryLastUpdated`: the homepage is "current" exactly when its
+ * most recently touched tool is, not on some independently tracked date. */
+export function getSiteLastUpdated(): string | undefined {
+  const dates = getIndexableTools().map((t) => t.lastUpdated);
+  if (dates.length === 0) return undefined;
+  return dates.reduce((latest, d) => (d > latest ? d : latest));
 }

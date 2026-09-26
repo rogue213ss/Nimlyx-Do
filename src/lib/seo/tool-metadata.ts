@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/site-config";
+import { absoluteUrl, siteConfig } from "@/lib/site-config";
 import type { ToolConfig, Category } from "@/lib/tool-registry";
 
 /** Builds Next.js Metadata for a registry tool, matching the shape already
@@ -69,6 +69,37 @@ export function buildWebAppJsonLd(tool: ToolConfig, path: string) {
       priceCurrency: "USD",
     },
     dateModified: tool.lastUpdated,
+  };
+}
+
+/** Builds `CollectionPage` JSON-LD for a category hub page, listing the
+ * category's own indexable tools as an `ItemList`. Mirrors the shape of
+ * `buildWebAppJsonLd`/`buildFaqJsonLd` (same `@context`/`@type` pattern,
+ * same "build it from registry data, don't hand-write it per page" idea)
+ * but is deliberately a separate, category-scoped schema — a hub page
+ * isn't itself a `WebApplication`, and this doesn't touch or duplicate the
+ * per-tool JSON-LD that already exists on each tool's own page. */
+export function buildCategoryJsonLd(category: Category, path: string, categoryTools: ToolConfig[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: category.name,
+    description: category.description,
+    url: absoluteUrl(path),
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: categoryTools.map((t, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: t.name,
+        url: absoluteUrl(`/${t.slug}/`),
+      })),
+    },
   };
 }
 
